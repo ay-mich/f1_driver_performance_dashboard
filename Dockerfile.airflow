@@ -1,0 +1,16 @@
+# Dockerfile.airflow
+
+# Use the Apache Airflow image as the base image
+FROM apache/airflow:latest
+
+USER root
+RUN apt-get update && apt-get install -y git
+
+# Switch back to airflow user if needed
+USER airflow
+
+# Install additional Python packages
+RUN pip install pandas sqlalchemy dbt-postgres
+
+# Set environment variable for dbt
+ENV DBT_PROFILES_DIR=/opt/modeling

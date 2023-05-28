@@ -1,0 +1,12 @@
+modeling:
+  target: prod
+  outputs:
+    prod:
+      type: postgres
+      threads: 10
+      host: db
+      port: 5432
+      user: f1_user
+      pass: passwordf1
+      dbname: f1
+      schema: public

@@ -1,0 +1,41 @@
+version: '3'
+name: f1_driver_performance
+
+services:
+  db:
+    image: postgres:latest
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+      - ./airflow/init:/docker-entrypoint-initdb.d/
+    environment:
+      - POSTGRES_USER=f1_user
+      - POSTGRES_PASSWORD=passwordf1
+      - POSTGRES_DB=f1
+    ports:
+      - 5432:5432
+
+  airflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+    depends_on:
+      - db
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://f1_user:passwordf1@db/f1?options=-csearch_path%3Dairflow
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_SCHEMA=airflow
+      - AIRFLOW__CORE__FERNET_KEY=f6hw-gUZuqQxnbpxVlDadzfDrZvmyDeu342NPugwbIY=
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - _AIRFLOW_DB_UPGRADE=true
+      - _AIRFLOW_WWW_USER_CREATE=true
+      - _AIRFLOW_WWW_USER_PASSWORD=admin
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./modeling:/opt/modeling
+      - ./data/ergast:/opt/airflow/data/ergast
+
+    ports:
+      - 8080:8080
+    command: airflow standalone

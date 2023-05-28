@@ -1,0 +1,23 @@
+# sources.yml
+
+version: 2
+
+sources:
+  - name: raw
+    database: f1
+    schema: public
+    tables:
+      - name: circuits
+      - name: constructor_results
+      - name: constructor_standings
+      - name: constructors
+      - name: driver_standings
+      - name: drivers
+      - name: lap_times
+      - name: pit_stops
+      - name: qualifying
+      - name: races
+      - name: results
+      - name: seasons
+      - name: status
+      - name: sprint_results
